@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocab widget</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --ink: #14110F;
+    --ko: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    --en: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  body { background: #E9E7E3; color: var(--ink); font-family: var(--en); padding: 32px; }
+  h2 { font-size: 13px; font-weight: 500; margin: 0 0 12px; color: #5F5E5A; }
+  section { margin-bottom: 40px; }
+  .grid { display: flex; flex-wrap: wrap; gap: 16px; }
+  .canvas { width: 338px; height: 158px; border-radius: 22px; overflow: hidden; position: relative; }
+  .canvas svg { display: block; width: 100%; height: 100%; }
+  .big .canvas { width: 676px; height: 316px; border-radius: 44px; }
+  label { font-size: 13px; display: inline-flex; gap: 6px; align-items: center; margin-bottom: 24px; }
+  body:not(.grain-on) .grain { display: none; }
+</style>
+</head>
+<body class="grain-on">
+<svg width="0" height="0" style="position:absolute">
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0.078  0 0 0 0 0.067  0 0 0 0 0.059  3 0 0 0 -1.35"/>
+  </filter>
+</svg>
+
+<label><input type="checkbox" id="toggle" checked> Paper grain</label>
+
+<section>
+  <h2>2× size, Monday</h2>
+  <div class="big" id="big"></div>
+</section>
+
+<section>
+  <h2>Actual size, Monday to Sunday</h2>
+  <div class="grid" id="week"></div>
+</section>
+
+<script>
+const days = [
+  { paper: "#FF3B57", term: "실마리", romanization: "silmari", translation: "a clue, a lead", example: "드디어 문제를 풀 실마리를 찾았다." },
+  { paper: "#7CFFB0", term: "곱씹다", romanization: "gopssipda", translation: "to mull over", example: "그 말을 몇 번이고 곱씹어 봤다." },
+  { paper: "#B57BFF", term: "번거롭다", romanization: "beongeoropda", translation: "cumbersome, a hassle", example: "서류를 다시 내는 게 너무 번거롭다." },
+  { paper: "#E8FF5A", term: "간과하다", romanization: "gangwahada", translation: "to overlook", example: "작은 실수라고 간과해서는 안 된다." },
+  { paper: "#2F86FF", term: "소홀하다", romanization: "soholhada", translation: "to neglect", example: "건강을 소홀히 하면 안 된다." },
+  { paper: "#FFB3CB", term: "고스란히", romanization: "goseuranhi", translation: "intact, entirely", example: "추억이 고스란히 남아 있다." },
+  { paper: "#8FD9EC", term: "섣불리", romanization: "seotbulli", translation: "rashly", example: "섣불리 판단하지 마세요." },
+];
+const ink = "#14110F";
+const ko = getComputedStyle(document.documentElement).getPropertyValue("--ko");
+const en = getComputedStyle(document.documentElement).getPropertyValue("--en");
+const measure = document.createElement("canvas").getContext("2d");
+measure.font = `800 100px ${ko}`;
+
+function fittedWord(term) {
+  const m = measure.measureText(term);
+  const count = [...term].length;
+  const inkWidth = m.actualBoundingBoxLeft + m.actualBoundingBoxRight - 5.5 * (count - 1);
+  const inkHeight = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
+  const scale = Math.min(306 / inkWidth, 85 / inkHeight, 1.5);
+  const x = 16 + m.actualBoundingBoxLeft * scale;
+  const y = 101.5 - m.actualBoundingBoxDescent * scale;
+  return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-family='${ko}' font-size="${(100 * scale).toFixed(1)}" font-weight="800" letter-spacing="${(-5.5 * scale).toFixed(2)}" fill="${ink}">${term}</text>`;
+}
+
+function widget(day) {
+  const rule = (y) => `<line x1="16" y1="${y}" x2="322" y2="${y}" stroke="${ink}"/>`;
+  return `<div class="canvas"><svg viewBox="0 0 338 158" role="img" aria-label="${day.term}, ${day.translation}">
+    <rect width="338" height="158" fill="${day.paper}"/>
+    <rect class="grain" width="338" height="158" filter="url(#grain)" opacity="0.16"/>
+    ${fittedWord(day.term)}
+    ${rule(12.5)}${rule(105.5)}${rule(125.5)}${rule(145.5)}
+    <text x="16" y="120" font-family='${en}' font-size="13" font-weight="700" fill="${ink}">${day.romanization}</text>
+    <text x="322" y="120" text-anchor="end" font-family='${en}' font-size="13" fill="${ink}">${day.translation}</text>
+    <text x="16" y="140" font-family='${ko}' font-size="13" fill="${ink}">${day.example}</text>
+  </svg></div>`;
+}
+
+document.getElementById("big").innerHTML = widget(days[0]);
+document.getElementById("week").innerHTML = days.map(widget).join("");
+document.getElementById("toggle").addEventListener("change", (e) => {
+  document.body.classList.toggle("grain-on", e.target.checked);
+});
+</script>
+</body>
+</html>

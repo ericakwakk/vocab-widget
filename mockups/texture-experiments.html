@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Texture experiments</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --ink: #14110F;
+    --ko: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    --en: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  body { background: #E9E7E3; color: var(--ink); font-family: var(--en); padding: 32px; }
+  .days { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+  .days button { font: 13px var(--en); padding: 6px 12px; border: 1px solid #B4B2A9; border-radius: 8px; background: transparent; cursor: pointer; }
+  .days button[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: #fff; }
+  .grid { display: flex; flex-wrap: wrap; gap: 24px 16px; }
+  h2 { font-size: 13px; font-weight: 500; margin: 0 0 8px; color: #444441; }
+  p.note { font-size: 12px; color: #5F5E5A; margin: 6px 0 0; max-width: 338px; line-height: 1.4; }
+  .canvas { width: 338px; height: 158px; border-radius: 22px; overflow: hidden; }
+  .canvas svg { display: block; width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="fine" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0.078  0 0 0 0 0.067  0 0 0 0 0.059  3 0 0 0 -1.35"/>
+  </filter>
+  <filter id="coarse" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.45" numOctaves="1" seed="4" stitchTiles="stitch"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0.078  0 0 0 0 0.067  0 0 0 0 0.059  4 0 0 0 -1.85"/>
+  </filter>
+  <filter id="fibers" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.006 0.45" numOctaves="3" seed="9" stitchTiles="stitch"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0.078  0 0 0 0 0.067  0 0 0 0 0.059  5 0 0 0 -2.45"/>
+  </filter>
+  <filter id="mottleDark" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" seed="2" stitchTiles="stitch"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0.078  0 0 0 0 0.067  0 0 0 0 0.059  4 0 0 0 -2.05"/>
+  </filter>
+  <filter id="mottleLight" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" seed="2" stitchTiles="stitch"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  -4 0 0 0 1.95"/>
+  </filter>
+  <filter id="speckle" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="1" seed="7" stitchTiles="stitch"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0.078  0 0 0 0 0.067  0 0 0 0 0.059  14 0 0 0 -9.3"/>
+  </filter>
+  <filter id="worn" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="12" stitchTiles="stitch" result="noise"/>
+    <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  14 0 0 0 -9.4" result="mask"/>
+    <feComposite in="SourceGraphic" in2="mask" operator="in"/>
+  </filter>
+</svg>
+
+<div class="days" id="days" role="group" aria-label="Preview day"></div>
+<div class="grid" id="grid"></div>
+
+<script>
+const days = [
+  { name: "Mon", paper: "#FF3B57", term: "실마리", romanization: "silmari", translation: "a clue, a lead", example: "드디어 문제를 풀 실마리를 찾았다." },
+  { name: "Tue", paper: "#7CFFB0", term: "곱씹다", romanization: "gopssipda", translation: "to mull over", example: "그 말을 몇 번이고 곱씹어 봤다." },
+  { name: "Wed", paper: "#B57BFF", term: "번거롭다", romanization: "beongeoropda", translation: "cumbersome, a hassle", example: "서류를 다시 내는 게 너무 번거롭다." },
+  { name: "Thu", paper: "#E8FF5A", term: "간과하다", romanization: "gangwahada", translation: "to overlook", example: "작은 실수라고 간과해서는 안 된다." },
+  { name: "Fri", paper: "#2F86FF", term: "소홀하다", romanization: "soholhada", translation: "to neglect", example: "건강을 소홀히 하면 안 된다." },
+  { name: "Sat", paper: "#FFB3CB", term: "고스란히", romanization: "goseuranhi", translation: "intact, entirely", example: "추억이 고스란히 남아 있다." },
+  { name: "Sun", paper: "#8FD9EC", term: "섣불리", romanization: "seotbulli", translation: "rashly", example: "섣불리 판단하지 마세요." },
+];
+
+const layer = (filter, opacity) => `<rect width="338" height="158" filter="url(#${filter})" opacity="${opacity}"/>`;
+const textures = [
+  { name: "1. Fine grain", note: "The one you liked. Even, fine noise, like smooth uncoated paper.", under: () => layer("fine", 0.16) },
+  { name: "2. Coarse riso grain", note: "Bigger, rougher grain, like a risograph print on cheap stock.", under: () => layer("coarse", 0.3) },
+  { name: "3. Paper fibers", note: "Fine grain plus faint horizontal fibers, like newsprint or kraft paper.", under: () => layer("fine", 0.14) + layer("fibers", 0.1) },
+  { name: "4. Uneven ink", note: "Soft light and dark patches, as if the color was printed slightly unevenly.", under: () => layer("mottleDark", 0.16) + layer("mottleLight", 0.2) + layer("fine", 0.12) },
+  { name: "5. Speckled stock", note: "Fine grain plus sparse dark flecks, like recycled paper.", under: () => layer("fine", 0.12) + layer("speckle", 0.55) },
+  { name: "6. Worn ink", note: "Fine grain, and the black ink itself has tiny gaps, like a well-used print.", under: () => layer("fine", 0.14), over: (d) => `<rect y="13" width="338" height="92" fill="${d.paper}" filter="url(#worn)"/>` },
+];
+
+const ink = "#14110F";
+const ko = getComputedStyle(document.documentElement).getPropertyValue("--ko");
+const en = getComputedStyle(document.documentElement).getPropertyValue("--en");
+const measure = document.createElement("canvas").getContext("2d");
+measure.font = `800 100px ${ko}`;
+
+function fittedWord(term) {
+  const m = measure.measureText(term);
+  const count = [...term].length;
+  const inkWidth = m.actualBoundingBoxLeft + m.actualBoundingBoxRight - 5.5 * (count - 1);
+  const inkHeight = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
+  const scale = Math.min(306 / inkWidth, 85 / inkHeight, 1.5);
+  const x = 16 + m.actualBoundingBoxLeft * scale;
+  const y = 101.5 - m.actualBoundingBoxDescent * scale;
+  return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-family='${ko}' font-size="${(100 * scale).toFixed(1)}" font-weight="800" letter-spacing="${(-5.5 * scale).toFixed(2)}" fill="${ink}">${term}</text>`;
+}
+
+function widget(day, texture) {
+  const rule = (y) => `<line x1="16" y1="${y}" x2="322" y2="${y}" stroke="${ink}"/>`;
+  return `<div class="canvas"><svg viewBox="0 0 338 158" role="img" aria-label="${texture.name}: ${day.term}">
+    <rect width="338" height="158" fill="${day.paper}"/>
+    ${texture.under()}
+    ${fittedWord(day.term)}
+    ${rule(12.5)}${rule(105.5)}${rule(125.5)}${rule(145.5)}
+    <text x="16" y="120" font-family='${en}' font-size="13" font-weight="700" fill="${ink}">${day.romanization}</text>
+    <text x="322" y="120" text-anchor="end" font-family='${en}' font-size="13" fill="${ink}">${day.translation}</text>
+    <text x="16" y="140" font-family='${ko}' font-size="13" fill="${ink}">${day.example}</text>
+    ${texture.over ? texture.over(day) : ""}
+  </svg></div>`;
+}
+
+const daysEl = document.getElementById("days");
+const grid = document.getElementById("grid");
+function show(i) {
+  grid.innerHTML = textures.map((t) => `<div><h2>${t.name}</h2>${widget(days[i], t)}<p class="note">${t.note}</p></div>`).join("");
+  [...daysEl.children].forEach((b, j) => b.setAttribute("aria-pressed", j === i));
+}
+days.forEach((d, i) => {
+  const b = document.createElement("button");
+  b.textContent = d.name;
+  b.onclick = () => show(i);
+  daysEl.appendChild(b);
+});
+show(0);
+</script>
+</body>
+</html>
