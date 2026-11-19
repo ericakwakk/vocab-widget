@@ -12,7 +12,7 @@ Medium widget, designed at 338 × 158 pt and checked at 364 × 170 pt.
 |---|---|
 | Widget | Padding 12 top and bottom, 16 left and right. One column, full width. No side column |
 | Top rule | 1 pt rule across the top of the column |
-| Korean word | Fills the remaining height and is sized each day to fit the full column width, bottom-aligned just above the caption row |
+| Korean word | Sized each day from its syllable count: as wide as the column allows, capped by the height. Optically centered between the top rule and the caption rule |
 | Caption row | Romanization on the left, translation on the right, 1 pt rule on top, 3 pt vertical padding |
 | Example row | Example sentence, 1 pt rules on top and bottom, 3 pt vertical padding |
 
@@ -22,12 +22,18 @@ The weekday and date are not shown. The daily paper color marks each new day.
 
 | Element | Font | Size | Line height |
 |---|---|---|---|
-| Korean word | Apple SD Gothic Neo Heavy, -5.5% letter spacing | Fitted to width, 62 at minimum for 4 syllables | 100% |
+| Korean word | Apple SD Gothic Neo Bold, default letter spacing | Fitted to width or height | Default |
 | Romanization | Helvetica Neue Bold | 13 | 16 |
 | Translation | Helvetica Neue Regular | 13 | 16 |
 | Example sentence | Apple SD Gothic Neo Regular | 13 | 16 |
 
 Example sentences must fit on one line, about 20 to 23 Korean characters at most.
+
+Apple SD Gothic Neo stops at Bold on iPhone. Heavy exists only on the Mac, and Scriptable has no letter-spacing setting, so the built widget uses Bold at default spacing.
+
+## Screen sizes
+
+The script looks up the medium widget size from the iPhone's screen width, then derives the column width and the word area from it. Unknown phones get an estimate scaled from the iPhone 13 size (338 × 158). Measured on an iPhone 17: screen width 402, widget about 348 × 164.
 
 ## Color
 
