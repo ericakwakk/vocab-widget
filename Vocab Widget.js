@@ -108,5 +108,9 @@ if (config.runsInApp) {
     await widget.presentMedium()
 }
 
+const tomorrow = new Date(today)
+tomorrow.setDate(tomorrow.getDate() + 1)
+widget.refreshAfterDate = tomorrow
+
 Script.setWidget(widget)
 Script.complete()
