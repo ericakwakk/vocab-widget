@@ -399,7 +399,7 @@ const WORD_AREA = WIDGET_HEIGHT - 24 - 4 - 47 - 12
 const ADVANCE = 1.0
 const INK = 0.9
 
-const start = new Date(2026, 10, 20)
+const start = new Date(2026, 10, 24)
 const today = new Date()
 today.setHours(0, 0, 0, 0)
 const dayNumber = Math.round((today - start) / 86400000)

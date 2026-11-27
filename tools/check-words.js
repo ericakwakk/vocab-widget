@@ -2,6 +2,7 @@
 // Run from the project folder:
 //   node tools/check-words.js            (Korean, Vocab Words.js)
 //   node tools/check-words.js mandarin   (Mandarin, Mandarin Words.js)
+//   node tools/check-words.js english    (English for Korean speakers, English Words.js)
 
 const fs = require("fs")
 const path = require("path")
@@ -27,6 +28,25 @@ const LANGUAGES = {
         romanization: /^[a-zāáǎàēéěèīíǐìōóǒòūúǔùüǖǘǚǜ' -]+$/,
         // Chinese words don't change form, so the whole word should appear.
         stem: term => term,
+    },
+    english: {
+        file: "English Words.js",
+        // English is counted in letters, not syllables. Spaces don't count.
+        maxTerm: 12,
+        term: /^[a-z' -]+$/,
+        maxExample: 40,
+        exampleForbidden: /[가-힣]/,
+        exampleForbiddenName: "Korean",
+        ending: /[.?!]$/,
+        endingName: ". ? or !",
+        // The "romanization" field holds the pronunciation written in Hangul.
+        romanization: /^[가-힣 ]+$/,
+        romanizationName: "Hangul",
+        // Hangul is about twice as wide as Latin letters at 13 pt.
+        maxCaption: 20,
+        // English words change form (decide, decided), so the last two letters are dropped.
+        stem: term => term.length > 5 ? term.slice(0, -2) : term,
+        ignoreCase: true,
     },
 }
 
@@ -54,24 +74,28 @@ words.forEach((word, index) => {
     }
     if (problems.length && !word.term) return
 
-    const syllables = [...word.term.replace(/\s/g, "")].length
+    const syllables = [...word.term.replace(/[\s-]/g, "")].length
     if (syllables > rules.maxTerm) problems.push(`${label}: term has ${syllables} syllables, ${rules.maxTerm} at most`)
+    if (rules.term && !rules.term.test(word.term)) problems.push(`${label}: term should be lowercase letters`)
 
     const exampleLength = [...word.example].length
     if (exampleLength > rules.maxExample) problems.push(`${label}: example is ${exampleLength} characters, ${rules.maxExample} at most`)
-    if (/[A-Za-z]/.test(word.example)) problems.push(`${label}: example contains Latin letters`)
+    const forbidden = rules.exampleForbidden ?? /[A-Za-z]/
+    if (forbidden.test(word.example)) problems.push(`${label}: example contains ${rules.exampleForbiddenName ?? "Latin"} letters`)
     if (!rules.ending.test(word.example)) problems.push(`${label}: example should end with ${rules.endingName}`)
 
-    if (!rules.romanization.test(word.romanization)) problems.push(`${label}: romanization should be lowercase Latin letters`)
+    if (!rules.romanization.test(word.romanization)) problems.push(`${label}: romanization should be ${rules.romanizationName ?? "lowercase Latin letters"}`)
     if (word.translation !== word.translation.toLowerCase()) problems.push(`${label}: translation should be lowercase`)
-    const captionLength = word.romanization.length + word.translation.length
-    if (captionLength > 42) problems.push(`${label}: romanization and translation are ${captionLength} characters together, 42 at most`)
+    const captionLength = [...word.romanization].length + [...word.translation].length
+    const maxCaption = rules.maxCaption ?? 42
+    if (captionLength > maxCaption) problems.push(`${label}: romanization and translation are ${captionLength} characters together, ${maxCaption} at most`)
 
     if (seen.has(word.term)) problems.push(`${label}: duplicate of #${seen.get(word.term)}`)
     seen.set(word.term, index + 1)
 
     const stem = rules.stem(word.term)
-    if (!word.example.includes(stem)) warnings.push(`${label}: example may not use the word (looked for "${stem}")`)
+    const example = rules.ignoreCase ? word.example.toLowerCase() : word.example
+    if (!example.includes(stem)) warnings.push(`${label}: example may not use the word (looked for "${stem}")`)
 })
 
 console.log(`${words.length} ${language} words checked`)
