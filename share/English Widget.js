@@ -1,0 +1,492 @@
+const words = [
+    {"term":"outgoing","romanization":"아웃고잉","translation":"외향적인","example":"My daughter is very outgoing."},
+    {"term":"tricky","romanization":"트리키","translation":"까다로운","example":"This recipe is a bit tricky."},
+    {"term":"insomnia","romanization":"인삼니아","translation":"불면증","example":"I've had insomnia lately."},
+    {"term":"outrageous","romanization":"아웃레이저스","translation":"터무니없는","example":"The rent here is outrageous."},
+    {"term":"inevitable","romanization":"이네비터블","translation":"피할 수 없는","example":"Change is inevitable."},
+    {"term":"on the fence","romanization":"온 더 펜스","translation":"결정을 못 한","example":"I'm still on the fence about it."},
+    {"term":"fall apart","romanization":"폴 어파트","translation":"망가지다","example":"My old shoes are falling apart."},
+    {"term":"my treat","romanization":"마이 트릿","translation":"제가 살게요","example":"Dinner is my treat tonight."},
+    {"term":"cranky","romanization":"크랭키","translation":"짜증 내는","example":"The baby is cranky today."},
+    {"term":"sentimental","romanization":"센티멘털","translation":"감상적인","example":"I'm sentimental about old photos."},
+    {"term":"embarrassed","romanization":"임배러스드","translation":"창피한","example":"I was so embarrassed."},
+    {"term":"tedious","romanization":"티디어스","translation":"지루하고 번거로운","example":"Filling out forms is tedious."},
+    {"term":"linger","romanization":"링거","translation":"오래 머무르다","example":"The smell still lingers."},
+    {"term":"obviously","romanization":"아비어슬리","translation":"당연히, 분명히","example":"He obviously wasn't listening."},
+    {"term":"groggy","romanization":"그라기","translation":"비몽사몽인","example":"I'm still groggy from my nap."},
+    {"term":"errand","romanization":"에런드","translation":"볼일, 심부름","example":"I have a few errands to run."},
+    {"term":"installment","romanization":"인스톨먼트","translation":"할부","example":"I paid in installments."},
+    {"term":"sincere","romanization":"신시어","translation":"진심 어린","example":"Please accept my sincere apology."},
+    {"term":"manage","romanization":"매니지","translation":"그럭저럭 해내다","example":"I'll manage somehow."},
+    {"term":"sturdy","romanization":"스터디","translation":"튼튼한","example":"This table is very sturdy."},
+    {"term":"etiquette","romanization":"에티켓","translation":"예절","example":"What's the etiquette here?"},
+    {"term":"diagnosis","romanization":"다이어그노시스","translation":"진단","example":"What was the diagnosis?"},
+    {"term":"bruise","romanization":"브루즈","translation":"멍","example":"I have a bruise on my arm."},
+    {"term":"worth","romanization":"워스","translation":"가치가 있는","example":"Is it worth the money?"},
+    {"term":"soggy","romanization":"사기","translation":"눅눅해진","example":"The fries got soggy."},
+    {"term":"drowsy","romanization":"드라우지","translation":"졸린","example":"This medicine makes me drowsy."},
+    {"term":"inquire","romanization":"인콰이어","translation":"문의하다","example":"I'm calling to inquire about the job."},
+    {"term":"small talk","romanization":"스몰 토크","translation":"가벼운 대화","example":"I'm bad at small talk."},
+    {"term":"settle in","romanization":"세틀 인","translation":"자리를 잡다","example":"Have you settled in yet?"},
+    {"term":"negotiate","romanization":"니고시에이트","translation":"협상하다","example":"You can negotiate the price."},
+    {"term":"convince","romanization":"컨빈스","translation":"설득하다","example":"I convinced him to come."},
+    {"term":"resilient","romanization":"리질리언트","translation":"회복력 있는","example":"Kids are very resilient."},
+    {"term":"priority","romanization":"프라이오러티","translation":"우선순위","example":"Family is my priority."},
+    {"term":"appropriate","romanization":"어프로프리엇","translation":"적절한","example":"Is this outfit appropriate?"},
+    {"term":"brag","romanization":"브래그","translation":"자랑하다","example":"He's always bragging."},
+    {"term":"subscription","romanization":"서브스크립션","translation":"구독","example":"Cancel your subscription."},
+    {"term":"humble","romanization":"험블","translation":"겸손한","example":"He's successful but very humble."},
+    {"term":"valuables","romanization":"밸류어블스","translation":"귀중품","example":"Keep your valuables with you."},
+    {"term":"realize","romanization":"리얼라이즈","translation":"깨닫다","example":"I didn't realize it was so late."},
+    {"term":"humid","romanization":"휴미드","translation":"습한","example":"It's so humid today."},
+    {"term":"moody","romanization":"무디","translation":"변덕스러운","example":"He's been moody all day."},
+    {"term":"puzzled","romanization":"퍼즐드","translation":"어리둥절한","example":"He looked puzzled."},
+    {"term":"oversleep","romanization":"오버슬립","translation":"늦잠 자다","example":"I overslept this morning."},
+    {"term":"overlook","romanization":"오버룩","translation":"간과하다","example":"It's easy to overlook details."},
+    {"term":"drawback","romanization":"드로백","translation":"단점","example":"The only drawback is the price."},
+    {"term":"hectic","romanization":"헥틱","translation":"정신없이 바쁜","example":"It's been a hectic week."},
+    {"term":"permanent","romanization":"퍼머넌트","translation":"영구적인","example":"Is the stain permanent?"},
+    {"term":"damp","romanization":"댐프","translation":"축축한","example":"The towels are still damp."},
+    {"term":"hint","romanization":"힌트","translation":"넌지시 말하다","example":"She hinted she wanted a puppy."},
+    {"term":"criticize","romanization":"크리티사이즈","translation":"비판하다","example":"Don't criticize him in public."},
+    {"term":"detour","romanization":"디투어","translation":"우회로","example":"We had to take a detour."},
+    {"term":"posture","romanization":"파스처","translation":"자세","example":"Watch your posture."},
+    {"term":"no big deal","romanization":"노 빅 딜","translation":"별일 아니다","example":"Don't worry, it's no big deal."},
+    {"term":"sensitive","romanization":"센서티브","translation":"예민한","example":"She's sensitive about her age."},
+    {"term":"greasy","romanization":"그리시","translation":"기름진","example":"I don't like greasy food."},
+    {"term":"heirloom","romanization":"에어룸","translation":"가보","example":"This ring is a family heirloom."},
+    {"term":"end up","romanization":"엔드 업","translation":"결국 ~하게 되다","example":"We ended up staying home."},
+    {"term":"disappointed","romanization":"디서포인티드","translation":"실망한","example":"I was disappointed with the movie."},
+    {"term":"muggy","romanization":"머기","translation":"후텁지근한","example":"It's hot and muggy today."},
+    {"term":"overwhelmed","romanization":"오버웰름드","translation":"벅찬, 압도된","example":"I feel overwhelmed this week."},
+    {"term":"clumsy","romanization":"클럼지","translation":"덜렁대는","example":"I'm so clumsy today."},
+    {"term":"inspire","romanization":"인스파이어","translation":"영감을 주다","example":"Your story inspired me."},
+    {"term":"hopefully","romanization":"호프풀리","translation":"바라건대","example":"Hopefully it won't rain."},
+    {"term":"take after","romanization":"테이크 애프터","translation":"닮다","example":"She takes after her father."},
+    {"term":"flatter","romanization":"플래터","translation":"아첨하다","example":"You're just trying to flatter me."},
+    {"term":"renovation","romanization":"레노베이션","translation":"리모델링","example":"The renovation took months."},
+    {"term":"ecstatic","romanization":"엑스태틱","translation":"황홀한","example":"She was ecstatic about the trip."},
+    {"term":"sort out","romanization":"소트 아웃","translation":"해결하다, 정리하다","example":"We'll sort it out tomorrow."},
+    {"term":"ceremony","romanization":"세러모니","translation":"의식, 식","example":"The ceremony starts at noon."},
+    {"term":"heads up","romanization":"헤즈 업","translation":"미리 알림","example":"Thanks for the heads up."},
+    {"term":"resolve","romanization":"리졸브","translation":"해결하다","example":"We resolved the problem."},
+    {"term":"punctual","romanization":"펑추얼","translation":"시간을 잘 지키는","example":"He's always punctual."},
+    {"term":"leak","romanization":"리크","translation":"새다","example":"The roof is leaking."},
+    {"term":"nag","romanization":"내그","translation":"잔소리하다","example":"Stop nagging me!"},
+    {"term":"just in case","romanization":"저스트 인 케이스","translation":"혹시 모르니까","example":"Bring a jacket just in case."},
+    {"term":"by accident","romanization":"바이 액시던트","translation":"우연히, 실수로","example":"I deleted it by accident."},
+    {"term":"inconvenient","romanization":"인컨비니언트","translation":"불편한","example":"Is this time inconvenient?"},
+    {"term":"run late","romanization":"런 레이트","translation":"늦어지다","example":"Sorry, I'm running late."},
+    {"term":"obligation","romanization":"아블리게이션","translation":"의무","example":"You're under no obligation."},
+    {"term":"cluttered","romanization":"클러터드","translation":"어수선한","example":"My desk is so cluttered."},
+    {"term":"optimistic","romanization":"압티미스틱","translation":"낙관적인","example":"I'm optimistic about it."},
+    {"term":"upcoming","romanization":"업커밍","translation":"다가오는","example":"Are you ready for the upcoming trip?"},
+    {"term":"worthwhile","romanization":"워스와일","translation":"할 가치가 있는","example":"The trip was worthwhile."},
+    {"term":"ingredient","romanization":"인그리디언트","translation":"재료","example":"What ingredients do I need?"},
+    {"term":"vague","romanization":"베이그","translation":"애매한","example":"His answer was a bit vague."},
+    {"term":"impatient","romanization":"임페이션트","translation":"성급한","example":"Don't be so impatient."},
+    {"term":"thrilled","romanization":"쓰릴드","translation":"몹시 기쁜","example":"We're thrilled about the news."},
+    {"term":"keep in touch","romanization":"킵 인 터치","translation":"연락하고 지내다","example":"Let's keep in touch."},
+    {"term":"stingy","romanization":"스틴지","translation":"인색한","example":"Don't be stingy with the tip."},
+    {"term":"on purpose","romanization":"온 퍼퍼스","translation":"일부러","example":"Did you do that on purpose?"},
+    {"term":"content","romanization":"컨텐트","translation":"만족하는","example":"I'm content with my life."},
+    {"term":"fluent","romanization":"플루언트","translation":"유창한","example":"She's fluent in three languages."},
+    {"term":"bewildered","romanization":"비윌더드","translation":"당황한","example":"He looked bewildered."},
+    {"term":"condolences","romanization":"컨돌런시즈","translation":"애도의 말","example":"My condolences to your family."},
+    {"term":"supplement","romanization":"서플리먼트","translation":"영양제","example":"Do you take any supplements?"},
+    {"term":"recover","romanization":"리커버","translation":"회복하다","example":"I hope you recover soon."},
+    {"term":"deserve","romanization":"디저브","translation":"받을 만하다","example":"You deserve a break."},
+    {"term":"tactful","romanization":"택트풀","translation":"눈치 있는, 요령 있는","example":"Try to be tactful with her."},
+    {"term":"reschedule","romanization":"리스케줄","translation":"일정을 다시 잡다","example":"Can we reschedule for Monday?"},
+    {"term":"get over","romanization":"겟 오버","translation":"극복하다","example":"It takes time to get over it."},
+    {"term":"encourage","romanization":"인커리지","translation":"격려하다","example":"She encouraged me to try."},
+    {"term":"arrange","romanization":"어레인지","translation":"일정을 잡다","example":"Let's arrange a time to meet."},
+    {"term":"predict","romanization":"프리딕트","translation":"예측하다","example":"No one can predict the future."},
+    {"term":"reluctant","romanization":"릴럭턴트","translation":"내키지 않는","example":"He was reluctant to help."},
+    {"term":"skeptical","romanization":"스켑티컬","translation":"의심하는","example":"I'm skeptical about that diet."},
+    {"term":"make up","romanization":"메이크 업","translation":"화해하다","example":"Did you two make up?"},
+    {"term":"last-minute","romanization":"라스트 미닛","translation":"막판의","example":"It was a last-minute change."},
+    {"term":"adjust","romanization":"어저스트","translation":"적응하다","example":"She's adjusting to her new school."},
+    {"term":"soothe","romanization":"수드","translation":"진정시키다","example":"This tea will soothe your throat."},
+    {"term":"suspect","romanization":"서스펙트","translation":"~라고 의심하다","example":"I suspect she already knows."},
+    {"term":"stressed out","romanization":"스트레스트 아웃","translation":"스트레스받는","example":"She's stressed out about exams."},
+    {"term":"exhausted","romanization":"이그조스티드","translation":"녹초가 된","example":"I'm exhausted after work."},
+    {"term":"suggest","romanization":"서제스트","translation":"제안하다","example":"What do you suggest?"},
+    {"term":"tease","romanization":"티즈","translation":"놀리다","example":"My brother loves to tease me."},
+    {"term":"vent","romanization":"벤트","translation":"하소연하다","example":"Sorry, I just needed to vent."},
+    {"term":"catch up","romanization":"캐치 업","translation":"밀린 얘기하다","example":"Let's catch up over coffee."},
+    {"term":"appreciate","romanization":"어프리시에이트","translation":"고맙게 여기다","example":"I really appreciate it."},
+    {"term":"upbeat","romanization":"업비트","translation":"긍정적인, 경쾌한","example":"She's always so upbeat."},
+    {"term":"heartbroken","romanization":"하트브로큰","translation":"가슴이 찢어지는","example":"She was heartbroken when he left."},
+    {"term":"confirm","romanization":"컨펌","translation":"확인하다","example":"I'm calling to confirm my appointment."},
+    {"term":"lease","romanization":"리스","translation":"임대 계약","example":"Our lease ends in May."},
+    {"term":"make sense","romanization":"메이크 센스","translation":"말이 되다","example":"Does that make sense?"},
+    {"term":"figure out","romanization":"피겨 아웃","translation":"알아내다","example":"I can't figure out this app."},
+    {"term":"craving","romanization":"크레이빙","translation":"먹고 싶은 것","example":"I'm craving something sweet."},
+    {"term":"overdue","romanization":"오버듀","translation":"기한이 지난","example":"This bill is overdue."},
+    {"term":"warranty","romanization":"워런티","translation":"품질 보증","example":"Does it come with a warranty?"},
+    {"term":"spacious","romanization":"스페이셔스","translation":"넓은","example":"The living room is spacious."},
+    {"term":"grateful","romanization":"그레이트풀","translation":"감사하는","example":"I'm grateful for your help."},
+    {"term":"consultation","romanization":"컨설테이션","translation":"상담","example":"The first consultation is free."},
+    {"term":"gloomy","romanization":"글루미","translation":"우울한, 흐린","example":"It's a gloomy day."},
+    {"term":"hospitality","romanization":"하스피탤리티","translation":"환대","example":"Thank you for your hospitality."},
+    {"term":"browse","romanization":"브라우즈","translation":"둘러보다","example":"I'm just browsing, thanks."},
+    {"term":"homesick","romanization":"홈식","translation":"향수병에 걸린","example":"I get homesick around holidays."},
+    {"term":"cope","romanization":"코프","translation":"대처하다","example":"How are you coping?"},
+    {"term":"unpack","romanization":"언팩","translation":"짐을 풀다","example":"I haven't unpacked yet."},
+    {"term":"postpone","romanization":"포스트폰","translation":"연기하다","example":"Can we postpone the meeting?"},
+    {"term":"admit","romanization":"어드밋","translation":"인정하다","example":"I admit I was wrong."},
+    {"term":"delighted","romanization":"딜라이티드","translation":"아주 기쁜","example":"I'd be delighted to come."},
+    {"term":"hassle","romanization":"해슬","translation":"번거로운 일","example":"Parking downtown is a hassle."},
+    {"term":"chaos","romanization":"케이아스","translation":"혼란","example":"The kitchen was in chaos."},
+    {"term":"prioritize","romanization":"프라이오리타이즈","translation":"우선순위를 두다","example":"You need to prioritize your health."},
+    {"term":"distract","romanization":"디스트랙트","translation":"주의를 흩뜨리다","example":"Don't distract the driver."},
+    {"term":"get the hang","romanization":"겟 더 행","translation":"요령을 터득하다","example":"You'll get the hang of it."},
+    {"term":"mature","romanization":"머추어","translation":"성숙한","example":"She's very mature for her age."},
+    {"term":"spontaneous","romanization":"스판테이니어스","translation":"즉흥적인","example":"Let's be spontaneous this weekend."},
+    {"term":"paperwork","romanization":"페이퍼워크","translation":"서류 작업","example":"I hate doing paperwork."},
+    {"term":"itinerary","romanization":"아이티너러리","translation":"여행 일정","example":"Let me check our itinerary."},
+    {"term":"spotless","romanization":"스팟리스","translation":"티끌 하나 없는","example":"Her kitchen is spotless."},
+    {"term":"come up with","romanization":"컴 업 위드","translation":"생각해 내다","example":"I came up with a plan."},
+    {"term":"affordable","romanization":"어포더블","translation":"가격이 적당한","example":"This place is pretty affordable."},
+    {"term":"get-together","romanization":"겟투게더","translation":"모임","example":"We're having a small get-together."},
+    {"term":"awkward","romanization":"어쿼드","translation":"어색한","example":"That was a little awkward."},
+    {"term":"outdated","romanization":"아웃데이티드","translation":"구식인","example":"My phone is outdated."},
+    {"term":"reliable","romanization":"릴라이어블","translation":"믿을 만한","example":"She's a very reliable person."},
+    {"term":"guarantee","romanization":"개런티","translation":"보장하다","example":"I can't guarantee it'll work."},
+    {"term":"rain check","romanization":"레인 체크","translation":"다음 기회","example":"Can I take a rain check?"},
+    {"term":"coincidence","romanization":"코인시던스","translation":"우연","example":"What a coincidence!"},
+    {"term":"intersection","romanization":"인터섹션","translation":"교차로","example":"Turn left at the intersection."},
+    {"term":"tolerate","romanization":"탈러레이트","translation":"참다, 견디다","example":"I can't tolerate the cold."},
+    {"term":"commitment","romanization":"커밋먼트","translation":"헌신, 약속","example":"A dog is a big commitment."},
+    {"term":"impression","romanization":"임프레션","translation":"인상","example":"She made a good impression."},
+    {"term":"sleep on it","romanization":"슬립 온 잇","translation":"하룻밤 생각해 보다","example":"Let me sleep on it."},
+    {"term":"potluck","romanization":"팟럭","translation":"각자 음식을 가져오는 모임","example":"Bring a dish to the potluck."},
+    {"term":"estimate","romanization":"에스티메이트","translation":"어림잡다","example":"Can you estimate the cost?"},
+    {"term":"consequence","romanization":"칸시퀀스","translation":"결과","example":"Think about the consequences."},
+    {"term":"reimburse","romanization":"리임버스","translation":"비용을 돌려주다","example":"The company will reimburse you."},
+    {"term":"compromise","romanization":"캄프러마이즈","translation":"타협하다","example":"Let's find a compromise."},
+    {"term":"dialect","romanization":"다이얼렉트","translation":"사투리","example":"She speaks a southern dialect."},
+    {"term":"temper","romanization":"템퍼","translation":"성질","example":"He has a bad temper."},
+    {"term":"eventually","romanization":"이벤추얼리","translation":"결국에는","example":"It'll get easier eventually."},
+    {"term":"diagnose","romanization":"다이어그노스","translation":"진단하다","example":"He was diagnosed with diabetes."},
+    {"term":"maintain","romanization":"메인테인","translation":"유지하다","example":"It's hard to maintain this lawn."},
+    {"term":"get along","romanization":"겟 얼롱","translation":"사이좋게 지내다","example":"Do you get along with your boss?"},
+    {"term":"for good","romanization":"포 굿","translation":"영영","example":"They moved back to Korea for good."},
+    {"term":"acknowledge","romanization":"액날리지","translation":"인정하다","example":"He didn't acknowledge my email."},
+    {"term":"chore","romanization":"초어","translation":"집안일","example":"Let's split the chores."},
+    {"term":"envy","romanization":"엔비","translation":"부러워하다","example":"I envy your energy."},
+    {"term":"colleague","romanization":"칼리그","translation":"직장 동료","example":"She's a colleague from work."},
+    {"term":"cuisine","romanization":"퀴진","translation":"요리, 음식 문화","example":"I love Italian cuisine."},
+    {"term":"insecure","romanization":"인시큐어","translation":"자신감 없는","example":"He feels insecure about his weight."},
+    {"term":"bring up","romanization":"브링 업","translation":"말을 꺼내다","example":"Don't bring up politics."},
+    {"term":"boundary","romanization":"바운더리","translation":"선, 경계","example":"It's important to set boundaries."},
+    {"term":"indecisive","romanization":"인디사이시브","translation":"우유부단한","example":"I'm so indecisive about food."},
+    {"term":"jet lag","romanization":"젯 래그","translation":"시차 피로","example":"I still have jet lag."},
+    {"term":"recognize","romanization":"레커그나이즈","translation":"알아보다","example":"I didn't recognize you!"},
+    {"term":"look forward","romanization":"룩 포워드","translation":"기대하다","example":"I look forward to seeing you."},
+    {"term":"wander","romanization":"완더","translation":"돌아다니다","example":"We wandered around the market."},
+    {"term":"exaggerate","romanization":"이그재저레이트","translation":"과장하다","example":"Don't exaggerate."},
+    {"term":"rewarding","romanization":"리워딩","translation":"보람 있는","example":"Teaching is very rewarding."},
+    {"term":"furious","romanization":"퓨리어스","translation":"몹시 화난","example":"He was furious with me."},
+    {"term":"easygoing","romanization":"이지고잉","translation":"느긋한, 무던한","example":"My husband is very easygoing."},
+    {"term":"in advance","romanization":"인 어드밴스","translation":"미리","example":"Please book in advance."},
+    {"term":"approve","romanization":"어프루브","translation":"승인하다","example":"My loan was approved."},
+    {"term":"turn down","romanization":"턴 다운","translation":"거절하다","example":"Why did you turn down the job?"},
+    {"term":"show off","romanization":"쇼 오프","translation":"뽐내다","example":"He likes to show off his car."},
+    {"term":"insist","romanization":"인시스트","translation":"고집하다","example":"He insisted on paying."},
+    {"term":"clearance","romanization":"클리어런스","translation":"재고 정리 세일","example":"I found this on clearance."},
+    {"term":"reveal","romanization":"리빌","translation":"밝히다","example":"She didn't reveal her age."},
+    {"term":"decline","romanization":"디클라인","translation":"정중히 거절하다","example":"I had to decline the invitation."},
+    {"term":"in-laws","romanization":"인로즈","translation":"사돈, 시댁 식구","example":"My in-laws are coming for dinner."},
+    {"term":"rush hour","romanization":"러시 아워","translation":"출퇴근 시간","example":"Avoid driving at rush hour."},
+    {"term":"sprain","romanization":"스프레인","translation":"삐다","example":"I sprained my ankle."},
+    {"term":"pointless","romanization":"포인트리스","translation":"소용없는","example":"It's pointless to argue."},
+    {"term":"nauseous","romanization":"노셔스","translation":"메스꺼운","example":"I feel nauseous."},
+    {"term":"complicated","romanization":"캄플리케이티드","translation":"복잡한","example":"It's a complicated story."},
+    {"term":"reasonable","romanization":"리즈너블","translation":"합리적인","example":"The price is reasonable."},
+    {"term":"apprehensive","romanization":"애프리헨시브","translation":"걱정되는","example":"I'm a bit apprehensive about it."},
+    {"term":"impressed","romanization":"임프레스트","translation":"감명받은","example":"I'm impressed with your cooking."},
+    {"term":"overcome","romanization":"오버컴","translation":"극복하다","example":"We'll overcome this together."},
+    {"term":"diligent","romanization":"딜리전트","translation":"부지런한","example":"She's a diligent student."},
+    {"term":"hit it off","romanization":"힛 잇 오프","translation":"금방 친해지다","example":"We really hit it off."},
+    {"term":"anxious","romanization":"앵셔스","translation":"불안해하는","example":"I get anxious before flights."},
+    {"term":"rely on","romanization":"릴라이 온","translation":"의지하다","example":"You can rely on me."},
+    {"term":"pricey","romanization":"프라이시","translation":"값비싼","example":"It's a little pricey."},
+    {"term":"avoid","romanization":"어보이드","translation":"피하다","example":"I try to avoid sugar."},
+    {"term":"cautious","romanization":"코셔스","translation":"조심스러운","example":"She's a cautious driver."},
+    {"term":"handy","romanization":"핸디","translation":"편리한, 유용한","example":"This little tool is handy."},
+    {"term":"digest","romanization":"다이제스트","translation":"소화하다","example":"I can't digest milk well."},
+    {"term":"appetite","romanization":"애피타이트","translation":"식욕","example":"I've lost my appetite."},
+    {"term":"belongings","romanization":"빌롱잉스","translation":"소지품","example":"Don't forget your belongings."},
+    {"term":"second-guess","romanization":"세컨드 게스","translation":"다시 의심하다","example":"Stop second-guessing yourself."},
+    {"term":"portion","romanization":"포션","translation":"양, 1인분","example":"The portions here are huge."},
+    {"term":"neglect","romanization":"니글렉트","translation":"소홀히 하다","example":"Don't neglect your health."},
+    {"term":"overpriced","romanization":"오버프라이스드","translation":"너무 비싼","example":"This place is overpriced."},
+    {"term":"irritable","romanization":"이리터블","translation":"짜증을 잘 내는","example":"I get irritable when I'm hungry."},
+    {"term":"cut back","romanization":"컷 백","translation":"줄이다","example":"I'm cutting back on sugar."},
+    {"term":"forgetful","romanization":"포겟풀","translation":"잘 잊어버리는","example":"I'm getting so forgetful."},
+    {"term":"bland","romanization":"블랜드","translation":"싱거운","example":"The soup is a little bland."},
+    {"term":"desperate","romanization":"데스퍼릿","translation":"절박한","example":"I'm desperate for a vacation."},
+    {"term":"durable","romanization":"듀러블","translation":"오래가는","example":"These boots are durable."},
+    {"term":"seasoning","romanization":"시즈닝","translation":"양념","example":"It needs more seasoning."},
+    {"term":"assume","romanization":"어숨","translation":"짐작하다","example":"I assumed you were busy."},
+    {"term":"relieved","romanization":"릴리브드","translation":"안심한","example":"I'm so relieved it's over."},
+    {"term":"subtle","romanization":"서틀","translation":"은은한, 미묘한","example":"I like the subtle flavor."},
+    {"term":"bother","romanization":"바더","translation":"신경 쓰이게 하다","example":"Does the noise bother you?"},
+    {"term":"pretend","romanization":"프리텐드","translation":"~인 척하다","example":"He pretended not to see me."},
+    {"term":"toddler","romanization":"타들러","translation":"걸음마 아기","example":"Her toddler is so cute."},
+    {"term":"contractor","romanization":"칸트랙터","translation":"시공업자","example":"The contractor is late again."},
+    {"term":"temporary","romanization":"템퍼러리","translation":"임시의","example":"It's only a temporary fix."},
+    {"term":"admire","romanization":"어드마이어","translation":"존경하다","example":"I really admire her."},
+    {"term":"mention","romanization":"멘션","translation":"언급하다","example":"Did she mention anything?"},
+    {"term":"stroll","romanization":"스트롤","translation":"산책하다","example":"Let's take a stroll after dinner."},
+    {"term":"leftovers","romanization":"레프트오버스","translation":"남은 음식","example":"We can eat leftovers for lunch."},
+    {"term":"imply","romanization":"임플라이","translation":"암시하다","example":"What are you implying?"},
+    {"term":"stale","romanization":"스테일","translation":"눅눅한, 오래된","example":"This bread is stale."},
+    {"term":"reassure","romanization":"리어슈어","translation":"안심시키다","example":"The doctor reassured me."},
+    {"term":"utilities","romanization":"유틸리티스","translation":"공과금","example":"Are utilities included?"},
+    {"term":"restless","romanization":"레스틀리스","translation":"안절부절못하는","example":"The kids are restless indoors."},
+    {"term":"layover","romanization":"레이오버","translation":"경유","example":"We have a layover in Tokyo."},
+    {"term":"clutter","romanization":"클러터","translation":"잡동사니","example":"There's too much clutter here."},
+    {"term":"nosy","romanization":"노지","translation":"참견하기 좋아하는","example":"Our neighbor is so nosy."},
+    {"term":"mortgage","romanization":"모기지","translation":"주택 담보 대출","example":"We just paid off the mortgage."},
+    {"term":"bond","romanization":"본드","translation":"유대감을 쌓다","example":"They bonded over cooking."},
+    {"term":"toll","romanization":"톨","translation":"통행료","example":"Is there a toll on this road?"},
+    {"term":"worth it","romanization":"워스 잇","translation":"그럴 만한 가치가 있는","example":"The long wait was worth it."},
+    {"term":"look into","romanization":"룩 인투","translation":"알아보다","example":"I'll look into it."},
+    {"term":"renovate","romanization":"레노베이트","translation":"리모델링하다","example":"We're renovating the kitchen."},
+    {"term":"attend","romanization":"어텐드","translation":"참석하다","example":"Will you attend the wedding?"},
+    {"term":"savory","romanization":"세이버리","translation":"짭짤한","example":"I prefer savory snacks."},
+    {"term":"appalled","romanization":"어폴드","translation":"경악한","example":"I was appalled by the service."},
+    {"term":"stubborn","romanization":"스터번","translation":"고집 센","example":"He's as stubborn as his dad."},
+    {"term":"appliance","romanization":"어플라이언스","translation":"가전제품","example":"The appliances are brand new."},
+    {"term":"bargain","romanization":"바긴","translation":"싸게 잘 산 것","example":"This coat was a real bargain."},
+    {"term":"slang","romanization":"슬랭","translation":"속어","example":"What does that slang mean?"},
+    {"term":"emphasize","romanization":"엠퍼사이즈","translation":"강조하다","example":"The doctor emphasized rest."},
+    {"term":"anticipate","romanization":"앤티시페이트","translation":"예상하다","example":"We didn't anticipate the traffic."},
+    {"term":"confess","romanization":"컨페스","translation":"고백하다","example":"I have to confess something."},
+    {"term":"blame","romanization":"블레임","translation":"탓하다","example":"Don't blame yourself."},
+    {"term":"out of order","romanization":"아웃 오브 오더","translation":"고장 난","example":"The elevator is out of order."},
+    {"term":"mumble","romanization":"멈블","translation":"중얼거리다","example":"Don't mumble, speak up."},
+    {"term":"put off","romanization":"풋 오프","translation":"미루다","example":"Stop putting off the dishes."},
+    {"term":"run into","romanization":"런 인투","translation":"우연히 마주치다","example":"I ran into your mom today."},
+    {"term":"up to you","romanization":"업 투 유","translation":"네가 정해","example":"It's up to you."},
+    {"term":"deal with","romanization":"딜 위드","translation":"처리하다, 대하다","example":"I'll deal with it tomorrow."},
+    {"term":"discourage","romanization":"디스커리지","translation":"낙담시키다","example":"Don't let it discourage you."},
+    {"term":"occasion","romanization":"어케이전","translation":"특별한 날","example":"What's the occasion?"},
+    {"term":"funeral","romanization":"퓨너럴","translation":"장례식","example":"The funeral is on Saturday."},
+    {"term":"circumstance","romanization":"서컴스턴스","translation":"상황, 사정","example":"Under the circumstances, it's fine."},
+    {"term":"bittersweet","romanization":"비터스위트","translation":"시원섭섭한","example":"Graduation is bittersweet."},
+    {"term":"guilty","romanization":"길티","translation":"죄책감이 드는","example":"I feel guilty for leaving early."},
+    {"term":"considerate","romanization":"컨시더릿","translation":"배려심 있는","example":"That's very considerate of you."},
+    {"term":"motivate","romanization":"모티베이트","translation":"동기를 주다","example":"What motivates you?"},
+    {"term":"afford","romanization":"어포드","translation":"형편이 되다","example":"We can't afford a new car."},
+    {"term":"whisper","romanization":"위스퍼","translation":"속삭이다","example":"Why are you whispering?"},
+    {"term":"scold","romanization":"스콜드","translation":"꾸짖다","example":"Don't scold him too much."},
+    {"term":"it depends","romanization":"잇 디펜즈","translation":"상황에 따라 다르다","example":"Well, it depends."},
+    {"term":"bossy","romanization":"보시","translation":"이래라저래라 하는","example":"My older sister is bossy."},
+    {"term":"grumpy","romanization":"그럼피","translation":"심통 난","example":"Why are you so grumpy?"},
+    {"term":"persuade","romanization":"퍼스웨이드","translation":"설득하다","example":"Can you persuade her to stay?"},
+    {"term":"swollen","romanization":"스월른","translation":"부은","example":"My ankle is swollen."},
+    {"term":"splurge","romanization":"스플러지","translation":"돈을 펑펑 쓰다","example":"Let's splurge on a nice dinner."},
+    {"term":"ripped off","romanization":"립트 오프","translation":"바가지 쓴","example":"I think we got ripped off."},
+    {"term":"pedestrian","romanization":"퍼데스트리언","translation":"보행자","example":"Watch out for pedestrians."},
+    {"term":"clarify","romanization":"클래러파이","translation":"분명히 하다","example":"Can you clarify that?"},
+    {"term":"optional","romanization":"압셔널","translation":"선택적인","example":"Dessert is optional."},
+    {"term":"tempting","romanization":"템프팅","translation":"솔깃한","example":"That cake looks tempting."},
+    {"term":"contribute","romanization":"컨트리뷰트","translation":"기여하다","example":"Everyone should contribute."},
+    {"term":"participate","romanization":"파티시페이트","translation":"참여하다","example":"Will you participate in the event?"},
+    {"term":"tuition","romanization":"투이션","translation":"등록금","example":"Tuition keeps going up."},
+    {"term":"flexible","romanization":"플렉서블","translation":"융통성 있는","example":"My hours are flexible."},
+    {"term":"maintenance","romanization":"메인터넌스","translation":"관리, 유지 보수","example":"Call maintenance about the heater."},
+    {"term":"side effect","romanization":"사이드 이펙트","translation":"부작용","example":"Are there any side effects?"},
+    {"term":"struggle","romanization":"스트러글","translation":"애쓰다, 힘들어하다","example":"I'm struggling with this."},
+    {"term":"genuine","romanization":"제뉴인","translation":"진짜의, 진실된","example":"He seems like a genuine person."},
+    {"term":"sarcastic","romanization":"사캐스틱","translation":"비꼬는","example":"Was that sarcastic?"},
+    {"term":"ridiculous","romanization":"리디큘러스","translation":"말도 안 되는","example":"That's a ridiculous price."},
+    {"term":"offended","romanization":"어펜디드","translation":"기분이 상한","example":"I hope you weren't offended."},
+    {"term":"thoughtful","romanization":"쏘트풀","translation":"사려 깊은","example":"What a thoughtful gift."},
+    {"term":"fed up","romanization":"페드 업","translation":"진절머리 난","example":"I'm fed up with the noise."},
+    {"term":"hesitate","romanization":"헤지테이트","translation":"망설이다","example":"Don't hesitate to ask."},
+    {"term":"refreshing","romanization":"리프레싱","translation":"상쾌한","example":"This tea is refreshing."},
+    {"term":"look up to","romanization":"룩 업 투","translation":"존경하다","example":"I've always looked up to you."},
+    {"term":"indulge","romanization":"인덜지","translation":"마음껏 즐기다","example":"I indulged in some chocolate."},
+    {"term":"nostalgic","romanization":"나스탤직","translation":"그리운, 향수에 젖은","example":"This song makes me nostalgic."},
+    {"term":"eager","romanization":"이거","translation":"간절히 하고 싶은","example":"She's eager to learn."},
+    {"term":"generous","romanization":"제너러스","translation":"너그러운, 후한","example":"You're very generous."},
+    {"term":"witty","romanization":"위티","translation":"재치 있는","example":"He's very witty."},
+    {"term":"anniversary","romanization":"애니버서리","translation":"기념일","example":"It's our anniversary today."},
+    {"term":"accurate","romanization":"애큐릿","translation":"정확한","example":"Is this scale accurate?"},
+    {"term":"fragile","romanization":"프래절","translation":"깨지기 쉬운","example":"Be careful, it's fragile."},
+    {"term":"doubt","romanization":"다우트","translation":"의심하다","example":"I doubt he'll come."},
+    {"term":"sensible","romanization":"센서블","translation":"분별 있는","example":"That's a sensible idea."},
+    {"term":"petty","romanization":"페티","translation":"사소한, 쩨쩨한","example":"Let's not be petty about it."},
+    {"term":"reputation","romanization":"레퓨테이션","translation":"평판","example":"This restaurant has a good reputation."},
+    {"term":"blunt","romanization":"블런트","translation":"직설적인","example":"Sorry to be blunt."},
+    {"term":"regret","romanization":"리그렛","translation":"후회하다","example":"You won't regret it."},
+    {"term":"go through","romanization":"고 쓰루","translation":"겪다","example":"She's going through a lot."},
+    {"term":"laid-back","romanization":"레이드백","translation":"여유로운","example":"It's a laid-back town."},
+    {"term":"stuffy","romanization":"스터피","translation":"답답한, 코가 막힌","example":"It's stuffy in here."},
+    {"term":"naive","romanization":"나이브","translation":"순진한","example":"Don't be so naive."},
+    {"term":"interrupt","romanization":"인터럽트","translation":"말을 끊다","example":"Sorry to interrupt."},
+    {"term":"flattered","romanization":"플래터드","translation":"우쭐해진","example":"I'm flattered, thank you."},
+    {"term":"ambition","romanization":"앰비션","translation":"야망","example":"She has big ambitions."},
+    {"term":"ashamed","romanization":"어셰임드","translation":"부끄러운","example":"I'm ashamed of what I said."},
+    {"term":"worn out","romanization":"원 아웃","translation":"지친, 닳은","example":"I'm completely worn out."},
+    {"term":"point out","romanization":"포인트 아웃","translation":"지적하다","example":"Thanks for pointing that out."},
+    {"term":"put up with","romanization":"풋 업 위드","translation":"참고 견디다","example":"I can't put up with this noise."},
+    {"term":"refuse","romanization":"리퓨즈","translation":"거부하다","example":"She refused to eat."},
+    {"term":"carpool","romanization":"카풀","translation":"카풀하다","example":"Do you want to carpool to work?"},
+    {"term":"cherish","romanization":"체리시","translation":"소중히 여기다","example":"I cherish these photos."},
+    {"term":"count on","romanization":"카운트 온","translation":"믿다, 기대다","example":"You can count on me."},
+    {"term":"compliment","romanization":"캄플리먼트","translation":"칭찬","example":"Thank you for the compliment."},
+    {"term":"apparently","romanization":"어패런틀리","translation":"듣자 하니","example":"Apparently, the store is closed."},
+    {"term":"milestone","romanization":"마일스톤","translation":"중요한 단계","example":"Turning sixty is a milestone."},
+    {"term":"break down","romanization":"브레이크 다운","translation":"고장 나다","example":"My car broke down again."},
+    {"term":"nutritious","romanization":"뉴트리셔스","translation":"영양가 높은","example":"Soup is cheap and nutritious."},
+    {"term":"deny","romanization":"디나이","translation":"부인하다","example":"He denied everything."},
+    {"term":"picky","romanization":"피키","translation":"까다로운","example":"My son is a picky eater."},
+    {"term":"frugal","romanization":"프루걸","translation":"검소한","example":"My parents are very frugal."},
+    {"term":"whine","romanization":"와인","translation":"징징대다","example":"Stop whining and eat."},
+    {"term":"decent","romanization":"디슨트","translation":"괜찮은, 쓸 만한","example":"The food was decent."},
+    {"term":"frustrated","romanization":"프러스트레이티드","translation":"답답한, 좌절한","example":"I'm frustrated with this printer."},
+    {"term":"gesture","romanization":"제스처","translation":"몸짓, 성의 표시","example":"It was a kind gesture."},
+    {"term":"spoil","romanization":"스포일","translation":"버릇없게 키우다","example":"Grandparents love to spoil kids."},
+    {"term":"notify","romanization":"노티파이","translation":"통지하다","example":"We'll notify you by email."},
+    {"term":"assemble","romanization":"어셈블","translation":"조립하다","example":"Can you help me assemble this?"},
+    {"term":"overjoyed","romanization":"오버조이드","translation":"매우 기쁜","example":"We were overjoyed to hear it."},
+    {"term":"condiment","romanization":"칸디먼트","translation":"조미료, 소스","example":"The condiments are on the table."},
+    {"term":"terrified","romanization":"테러파이드","translation":"겁에 질린","example":"I'm terrified of heights."},
+    {"term":"declutter","romanization":"디클러터","translation":"잡동사니를 정리하다","example":"It's time to declutter."},
+    {"term":"remedy","romanization":"레머디","translation":"치료법","example":"Ginger tea is a good remedy."},
+    {"term":"reunion","romanization":"리유니언","translation":"동창회, 모임","example":"We have a family reunion soon."},
+    {"term":"devastated","romanization":"데버스테이티드","translation":"큰 충격을 받은","example":"She was devastated by the loss."},
+    {"term":"piece of cake","romanization":"피스 오브 케이크","translation":"식은 죽 먹기","example":"That test was a piece of cake."},
+    {"term":"symptom","romanization":"심텀","translation":"증상","example":"What are your symptoms?"},
+]
+
+const papers = ["#8FD9EC", "#FF3B57", "#7CFFB0", "#B57BFF", "#E8FF5A", "#2F86FF", "#FFB3CB"]
+const ink = new Color("#14110F")
+
+function addRule(stack) {
+    const rule = stack.addStack()
+    rule.size = new Size(0, 1)
+    rule.backgroundColor = ink
+    rule.addSpacer()
+}
+
+const WIDGET_SIZES = {
+    430: [364, 170],
+    428: [364, 170],
+    414: [360, 169],
+    402: [348, 164],
+    393: [338, 158],
+    390: [338, 158],
+    375: [329, 155],
+}
+
+function widgetSize() {
+    const screen = Math.round(Device.screenSize().width)
+    if (WIDGET_SIZES[screen]) return WIDGET_SIZES[screen]
+    const scale = screen / 390
+    return [Math.round(338 * scale), Math.round(158 * scale)]
+}
+
+const [WIDGET_WIDTH, WIDGET_HEIGHT] = widgetSize()
+const COLUMN_WIDTH = WIDGET_WIDTH - 32
+const WORD_AREA = WIDGET_HEIGHT - 24 - 4 - 47 - 12
+const ADVANCE = 0.6
+const INK = 0.9
+
+const start = new Date(2026, 10, 26)
+const today = new Date()
+today.setHours(0, 0, 0, 0)
+const dayNumber = Math.round((today - start) / 86400000)
+
+const word = words[dayNumber % words.length]
+const paper = papers[today.getDay()]
+
+const widget = new ListWidget()
+widget.backgroundColor = new Color(paper)
+
+const dayNames = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+const day = today.getDay()
+
+const files = FileManager.local()
+const folder = files.joinPath(files.documentsDirectory(), "vocab-backgrounds")
+if (!files.fileExists(folder)) files.createDirectory(folder)
+const imageName = `background-${day}-${dayNames[day]}.png`
+const path = files.joinPath(folder, imageName)
+if (!files.fileExists(path)) {
+    try {
+        const image = await new Request(`https://raw.githubusercontent.com/ericakwakk/vocab-widget/main/backgrounds/${imageName}`).loadImage()
+        files.writeImage(path, image)
+    } catch (error) {
+        // No internet yet: show the plain paper color today and try again tomorrow.
+    }
+}
+if (files.fileExists(path)) widget.backgroundImage = files.readImage(path)
+
+widget.setPadding(12, 16, 12, 16)
+
+widget.spacing = 0
+
+addRule(widget)
+widget.addSpacer()
+
+const syllables = [...word.term].length
+const wordSize = Math.min(COLUMN_WIDTH / (syllables * ADVANCE), WORD_AREA / 1.4)
+
+const nudge = wordSize * 0
+widget.addSpacer(nudge * 2)
+
+const wordBox = widget.addStack()
+wordBox.size = new Size(COLUMN_WIDTH, WORD_AREA - nudge * 2)
+wordBox.centerAlignContent()
+
+const term = wordBox.addText(word.term)
+term.font = new Font("HelveticaNeue-Bold", wordSize)
+term.textColor = ink
+term.lineLimit = 1
+
+wordBox.addSpacer()
+
+widget.addSpacer()
+addRule(widget)
+
+const caption = widget.addStack()
+caption.setPadding(3, 0, 3, 0)
+
+const romanization = caption.addText(word.romanization)
+romanization.font = new Font("AppleSDGothicNeo-Bold", 13)
+romanization.textColor = ink
+
+caption.addSpacer()
+
+const translation = caption.addText(word.translation)
+translation.font = new Font("AppleSDGothicNeo-Regular", 13)
+translation.textColor = ink
+
+addRule(widget)
+
+const exampleRow = widget.addStack()
+exampleRow.setPadding(3, 0, 3, 0)
+
+const example = exampleRow.addText(word.example)
+example.font = new Font("HelveticaNeue", 13)
+example.textColor = ink
+example.lineLimit = 1
+
+addRule(widget)
+
+if (config.runsInApp) {
+    await widget.presentMedium()
+}
+
+const tomorrow = new Date(today)
+tomorrow.setDate(tomorrow.getDate() + 1)
+widget.refreshAfterDate = tomorrow
+
+Script.setWidget(widget)
+Script.complete()

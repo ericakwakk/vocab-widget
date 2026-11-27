@@ -60,7 +60,7 @@ addRule(widget)
 widget.addSpacer()
 
 const syllables = [...word.term].length
-const wordSize = Math.min(COLUMN_WIDTH / (syllables * ADVANCE), WORD_AREA / 1.25)
+const wordSize = Math.min(COLUMN_WIDTH / (syllables * ADVANCE), WORD_AREA / 1.4)
 
 const nudge = wordSize * 0
 widget.addSpacer(nudge * 2)
